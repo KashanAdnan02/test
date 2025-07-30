@@ -30,7 +30,7 @@ const Signin = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
 
-    const response = await axios.post('http://localhost:8080/api/login', formData)
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}api/login`, formData)
     .then((res)=>{
       console.log(res.data.userExist)
       console.log(res.data.token)
