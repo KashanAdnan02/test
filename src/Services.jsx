@@ -3,6 +3,8 @@ import axios from 'axios';
 import { User, Briefcase, Car, Building2 } from 'lucide-react';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
+import { fetchAll } from './features/api/api';
+import { useLoanTypes } from './features/loanType/loanTypeService';
 
 const iconMapper = (loanType) => {
   const lower = loanType.toLowerCase();
@@ -14,31 +16,36 @@ const iconMapper = (loanType) => {
 
 const Services = () => {
   const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/loanType') // change base URL if needed
-      .then((res) => {
-        setServices(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching loan types:', err);
-        setLoading(false);
-      });
-  }, []);
+  const {data, isLoading ,error} = useLoanTypes("loanType")
+  console.log(error)
+
+  // console.log(await fetchAll("loanType"))
+
+  // useEffect(() => {
+  //   axios
+  //     .get('http://localhost:8080/loanType') // change base URL if needed
+  //     .then((res) => {
+  //       setServices(res.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error('Error fetching loan types:', err);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   return (
     <div>
       <section className="bg-gradient-to-r from-white to-green-50 py-16 px-4 text-center">
         <h2 className="text-3xl font-semibold text-gray-800 mb-12">Our Services</h2>
 
-        {loading ? (
+        {isLoading? (
           <p className="text-gray-600">Loading services...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {services.map((service, index) => (
+            {data.map((service, index) => (
               <div
                 key={service._id || index}
                 className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition duration-300"
